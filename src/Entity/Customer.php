@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\CustomerRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -9,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=CustomerRepository::class)
+ * @ApiResource
  */
 class Customer
 {
@@ -61,7 +63,7 @@ class Customer
 
     public function getFirstname(): ?string
     {
-        return $this->firstname;
+        return $this->firstName;
     }
 
     public function setFirstName(string $firstName): self
