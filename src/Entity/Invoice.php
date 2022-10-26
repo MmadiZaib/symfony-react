@@ -126,4 +126,14 @@ class Invoice
 
         return $this;
     }
+
+    /**
+     * Permet de récupérer le user à qui appartient finalement la facture
+     * @Groups({"invoices_read"})
+     * @return User
+     */
+    public function getUser(): User
+    {
+        return $this->customer->getUser();
+    }
 }
