@@ -134,7 +134,7 @@ class Invoice
 
     /**
      * Permet de récupérer le user à qui appartient finalement la facture
-     * @Groups({"invoices_read"})
+     * @Groups({"invoices_read", "invoices_subresource"})
      * @return User
      */
     public function getUser(): User
