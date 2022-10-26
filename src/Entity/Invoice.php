@@ -4,7 +4,9 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\InvoiceRepository;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=InvoiceRepository::class)
@@ -13,6 +15,9 @@ use Doctrine\ORM\Mapping as ORM;
  *         "pagination_enabled"=true,
  *         "pagination_items_per_page"=20,
  *         "order": {"amount": "desc"}
+ *     },
+ *     normalizationContext={
+ *     "groups"={"invoices_read"}
  *     }
  * )
  */
@@ -22,32 +27,38 @@ class Invoice
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"invoices_read", "customers_read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups({"invoices_read", "customers_read"})
      */
     private $amount;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"invoices_read", "customers_read"})
      */
     private $sentAt;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"invoices_read", "customers_read"})
      */
     private $status;
 
     /**
      * @ORM\ManyToOne(targetEntity=Customer::class, inversedBy="invoices")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"invoices_read"})
      */
     private $customer;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"invoices_read", "customers_read"})
      */
     private $invoiceId;
 
@@ -68,12 +79,12 @@ class Invoice
         return $this;
     }
 
-    public function getSentAt(): ?\DateTimeInterface
+    public function getSentAt(): ?DateTimeInterface
     {
         return $this->sentAt;
     }
 
-    public function setSentAt(\DateTimeInterface $sentAt): self
+    public function setSentAt(DateTimeInterface $sentAt): self
     {
         $this->sentAt = $sentAt;
 
