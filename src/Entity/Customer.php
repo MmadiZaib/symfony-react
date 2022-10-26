@@ -18,6 +18,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ApiResource(
  *     collectionOperations={"GET", "POST"},
  *     itemOperations={"GET", "PUT", "DELETE"},
+ *     subresourceOperations={
+ *         "invoices_get_subresource"={"path"="/customers/{id}/invoices"}
+ *     },
  *     normalizationContext={
  *     "groups"={"customers_read"}
  *     }
