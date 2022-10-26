@@ -15,8 +15,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * @ORM\Entity(repositoryClass=CustomerRepository::class)
  * @ApiResource(
- *     collectionOperations={"GET", "POST"},
- *     itemOperations={"GET", "PUT", "DELETE"},
+ *     collectionOperations={"GET"={"path"="/clients"}, "POST"},
+ *     itemOperations={"GET"={"path"="/clients/{id}"}, "PUT", "DELETE"},
  *     normalizationContext={
  *     "groups"={"customers_read"}
  *     }
