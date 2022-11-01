@@ -34,7 +34,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     },
  *     normalizationContext={
  *     "groups"={"invoices_read"}
- *     }
+ *     },
+ *     denormalizationContext={"disable_type_enforcement"=true}
  * )
  */
 class Invoice
@@ -97,7 +98,7 @@ class Invoice
         return $this->amount;
     }
 
-    public function setAmount(float $amount): self
+    public function setAmount($amount): self
     {
         $this->amount = $amount;
 
