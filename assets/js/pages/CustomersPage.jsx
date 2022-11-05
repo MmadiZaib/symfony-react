@@ -1,6 +1,18 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios"
 
 const CustomersPage = (props) => {
+
+    const [customers, setCustomers] = useState([]);
+
+    useEffect(() => {
+        axios
+            .get("http://symreact.localhost/api/customers")
+            .then(response =>response.data['hydra:member'])
+            .then(data => setCustomers(data))
+            .catch(error => console.log(error.response));
+    }, [])
+
     return (
         <>
             <h1>Liste des clients</h1>
@@ -18,24 +30,22 @@ const CustomersPage = (props) => {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>12</td>
-                        <td>
-                            <a href="#">Mmadi Zaib</a>
-                        </td>
-                        <td>mmadi@mail.io</td>
-                        <td>Mmadi Inc</td>
-                        <td className="text-center">
-                            <span className="badge bg-primary">4</span>
-                        </td>
-                        <td className="text-center">2 400,00 €</td>
-                        <td>
-                            <button className="btn btn-sm btn-danger">Supprimer</button>
-                        </td>
-                    </tr>
+                {customers.map(customer => <tr key={customer.id}>
+                    <td>{customer.id}</td>
+                    <td>
+                        <a href="#">{customer.firstName} {customer.lastName}</a>
+                    </td>
+                    <td>{customer.email}</td>
+                    <td>{customer.company}</td>
+                    <td className="text-center">
+                        <span className="badge bg-primary">{customer.invoices.length}</span>
+                    </td>
+                    <td className="text-center">{customer.totalAmount.toLocaleString()} €</td>
+                    <td>
+                        <button className="btn btn-sm btn-danger">Supprimer</button>
+                    </td>
+                </tr>)}
                 </tbody>
-
-
             </table>
         </>
 
