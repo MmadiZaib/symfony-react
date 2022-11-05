@@ -12,9 +12,19 @@ import './styles/app.css';
 
 // start the Stimulus application
 import './bootstrap';
+import NavBar from "./js/components/NavBar";
+import HomePage from "./js/pages/HomePage";
 
 const App = () => {
-    return <h1>Bonjour à tous !</h1>
+    return (
+        <>
+            <NavBar />
+
+            <div className="container pt-5">
+                <HomePage />
+            </div>
+        </>
+    );
 };
 
 const rootElement = document.querySelector('#app');
