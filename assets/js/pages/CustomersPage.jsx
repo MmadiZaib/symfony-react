@@ -13,6 +13,18 @@ const CustomersPage = (props) => {
             .catch(error => console.log(error.response));
     }, [])
 
+    const handleDelete = id => {
+        const originalCustomers = [...customers];
+        setCustomers(customers.filter(customer => customer.id !== id));
+
+        axios.delete("http://symreact.localhost/api/customers/" + id)
+            .then(response => console.log('OK'))
+            .catch(error => {
+                setCustomers(originalCustomers);
+                console.log(error.response);
+            });
+    };
+
     return (
         <>
             <h1>Liste des clients</h1>
@@ -42,7 +54,12 @@ const CustomersPage = (props) => {
                     </td>
                     <td className="text-center">{customer.totalAmount.toLocaleString()} €</td>
                     <td>
-                        <button className="btn btn-sm btn-danger">Supprimer</button>
+                        <button
+                            onClick={() => handleDelete(customer.id)}
+                            disabled={customer.invoices.length > 0}
+                            className="btn btn-sm btn-danger">
+                            Supprimer
+                        </button>
                     </td>
                 </tr>)}
                 </tbody>
