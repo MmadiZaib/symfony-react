@@ -19,6 +19,7 @@ import HomePage from "./js/pages/HomePage";
 import CustomersPage from "./js/pages/CustomersPage";
 
 import { HashRouter, Switch , Route } from "react-router-dom";
+import CustomersPageWithPagination from "./js/pages/CustomersPageWithPagination";
 
 const App = () => {
     return (
@@ -26,7 +27,7 @@ const App = () => {
             <NavBar />
             <main className="container pt-5">
                 <Switch>
-                    <Route path="/customers" component={CustomersPage} />
+                    <Route path="/customers" component={CustomersPageWithPagination} />
                     <Route path="/" component={HomePage} />
                 </Switch>
             </main>
