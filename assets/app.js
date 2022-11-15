@@ -17,6 +17,7 @@ import NavBar from "./js/components/NavBar";
 
 import HomePage from "./js/pages/HomePage";
 import CustomersPage from "./js/pages/CustomersPage";
+import InvoicesPage from "./js/pages/InvoicesPage";
 
 import { HashRouter, Switch , Route } from "react-router-dom";
 import CustomersPageWithPagination from "./js/pages/CustomersPageWithPagination";
@@ -27,6 +28,7 @@ const App = () => {
             <NavBar />
             <main className="container pt-5">
                 <Switch>
+                    <Route path="/invoices" component={InvoicesPage} />
                     <Route path="/customers" component={CustomersPage} />
                     <Route path="/" component={HomePage} />
                 </Switch>
