@@ -7,11 +7,15 @@ function authenticate(credentials) {
             .then(token => {
                 window.localStorage.setItem("authToken", token);
                 axios.defaults.headers["Authorization"] = "Bearer " + token;
-
-                return true;
             });
 }
 
+function logout() {
+    window.localStorage.removeItem("authToken");
+    delete axios.defaults.headers["Authorization"];
+}
+
 export default {
-    authenticate
+    authenticate,
+    logout
 };
