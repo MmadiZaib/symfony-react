@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react';
+import React, {useState} from 'react';
 import ReactDOM from 'react-dom';
 /*
  * Welcome to your app's main JavaScript file!
@@ -21,36 +21,24 @@ import InvoicesPage from "./js/pages/InvoicesPage";
 import LoginPage from "./js/pages/LoginPage";
 import AuthAPI from "./js/services/authAPI";
 import AuthContext from "./js/contexts/AuthContext";
+import PrivateRoute from "./js/components/PrivateRoute";
 
-import { HashRouter, Switch , Route, withRouter, Redirect } from "react-router-dom";
-import CustomersPageWithPagination from "./js/pages/CustomersPageWithPagination";
+import { HashRouter, Switch , Route, withRouter } from "react-router-dom";
+//import CustomersPageWithPagination from "./js/pages/CustomersPageWithPagination";
 
 
 AuthAPI.setup();
 
-const PrivateRoute = ({path, component}) => {
-    const { isAuthenticated } = useContext(AuthContext);
-    return isAuthenticated ? (
-        <Route path={path} component={component} />
-    ) : (
-        <Redirect to="/login" />
-    );
-}
-
-
 const App = () => {
 
     const [isAuthenticated, setIsAuthenticated] = useState(AuthAPI.istAuthenticated());
-
     const NavBarWithRouter = withRouter(NavBar);
 
-    const contextValue = {
-        isAuthenticated,
-        setIsAuthenticated
-    };
-
     return (
-        <AuthContext.Provider value={contextValue}>
+        <AuthContext.Provider value={{
+            isAuthenticated,
+            setIsAuthenticated
+        }}>
             <HashRouter>
                 <NavBarWithRouter />
                 <main className="container pt-5">
