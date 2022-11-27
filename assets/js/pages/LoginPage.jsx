@@ -1,13 +1,16 @@
-import React, { useState } from "react"
+import React, { useState, useContext } from "react"
 import axios from "axios";
 
 import AuthAPI from "../services/authAPI";
+import AuthContext from "../contexts/AuthContext";
 
-const LoginPage = ({ onLogin, history }) => {
+const LoginPage = ({history }) => {
     const [credentials, setCredentials] = useState({
         "username": "",
         "password": ""
     });
+
+    const { setIsAuthenticated } = useContext(AuthContext)
 
     const [error, setError] = useState('');
 
@@ -23,7 +26,7 @@ const LoginPage = ({ onLogin, history }) => {
         try {
            await AuthAPI.authenticate(credentials);
            setError("")
-            onLogin(true);
+            setIsAuthenticated(true);
             history.replace("/customers");
         } catch (e) {
             setError("Aucun compte ne possède cette adresse ou alors les informations ne correspondent pas!");
