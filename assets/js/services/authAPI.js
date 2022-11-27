@@ -11,6 +11,16 @@ function authenticate(credentials) {
             });
 }
 
+function istAuthenticated() {
+    const token = window.localStorage.getItem("authToken");
+    if (token) {
+        const {exp: expiration} = jwtDecode(token)
+        return expiration * 1000 > new Date().getTime;
+    }
+
+    return false;
+}
+
 function setAxiosToken(token) {
     axios.defaults.headers["Authorization"] = "Bearer " + token;
 }
@@ -32,5 +42,6 @@ function setup() {
 export default {
     authenticate,
     logout,
-    setup
+    setup,
+    istAuthenticated
 };
