@@ -22,7 +22,9 @@ import LoginPage from "./js/pages/LoginPage";
 
 import { HashRouter, Switch , Route } from "react-router-dom";
 import CustomersPageWithPagination from "./js/pages/CustomersPageWithPagination";
+import AuthAPI from "./js/services/authAPI";
 
+AuthAPI.setup();
 
 const App = () => {
     return (

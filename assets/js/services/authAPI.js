@@ -1,4 +1,5 @@
 import axios from "axios";
+import jwtDecode from "jwt-decode";
 
 function authenticate(credentials) {
      return axios
@@ -6,8 +7,12 @@ function authenticate(credentials) {
             .then(response => response.data.token)
             .then(token => {
                 window.localStorage.setItem("authToken", token);
-                axios.defaults.headers["Authorization"] = "Bearer " + token;
+                setAxiosToken(token);
             });
+}
+
+function setAxiosToken(token) {
+    axios.defaults.headers["Authorization"] = "Bearer " + token;
 }
 
 function logout() {
@@ -15,7 +20,17 @@ function logout() {
     delete axios.defaults.headers["Authorization"];
 }
 
+function setup() {
+    const token = window.localStorage.getItem("authToken");
+    if (token) {
+        const {exp: expiration} = jwtDecode(token)
+        if (expiration * 1000 > new Date().getTime) {
+            setAxiosToken(token);
+        }
+    }
+}
 export default {
     authenticate,
-    logout
+    logout,
+    setup
 };
