@@ -20,11 +20,15 @@ import CustomersPage from "./js/pages/CustomersPage";
 import InvoicesPage from "./js/pages/InvoicesPage";
 import LoginPage from "./js/pages/LoginPage";
 
-import { HashRouter, Switch , Route, withRouter } from "react-router-dom";
+import { HashRouter, Switch , Route, withRouter, Redirect } from "react-router-dom";
 import CustomersPageWithPagination from "./js/pages/CustomersPageWithPagination";
 import AuthAPI from "./js/services/authAPI";
 
 AuthAPI.setup();
+
+const PrivateRoute = ({path, isAuthendticated, component}) => {
+    return isAuthendticated ? <Route path={path} component={component} /> : <Redirect to="/login" />
+}
 
 const App = () => {
 
@@ -43,8 +47,16 @@ const App = () => {
                                    onLogin={setIsAuthenticated} {...props}
                                />
                     )} />
-                    <Route path="/invoices" component={InvoicesPage} />
-                    <Route path="/customers" component={CustomersPage} />
+                    <PrivateRoute
+                        path="/invoices"
+                        isAuthendticated={isAuthenticated}
+                        component={InvoicesPage}
+                    />
+                    <PrivateRoute
+                        path="/customers"
+                        isAuthendticated={isAuthenticated}
+                        component={CustomersPage}
+                    />
                     <Route path="/" component={HomePage} />
                 </Switch>
             </main>
