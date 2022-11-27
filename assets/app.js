@@ -20,7 +20,7 @@ import CustomersPage from "./js/pages/CustomersPage";
 import InvoicesPage from "./js/pages/InvoicesPage";
 import LoginPage from "./js/pages/LoginPage";
 
-import { HashRouter, Switch , Route } from "react-router-dom";
+import { HashRouter, Switch , Route, withRouter } from "react-router-dom";
 import CustomersPageWithPagination from "./js/pages/CustomersPageWithPagination";
 import AuthAPI from "./js/services/authAPI";
 
@@ -30,15 +30,17 @@ const App = () => {
 
     const [isAuthenticated, setIsAuthenticated] = useState(AuthAPI.istAuthenticated());
 
+    const NavBarWithRouter = withRouter(NavBar);
+
     return (
         <HashRouter>
-            <NavBar isAuthenticated={isAuthenticated} onLogout={setIsAuthenticated}/>
+            <NavBarWithRouter isAuthenticated={isAuthenticated} onLogout={setIsAuthenticated}/>
             <main className="container pt-5">
                 <Switch>
                     <Route path="/login"
                            render={(props) => (
                                <LoginPage
-                                   onLogin={setIsAuthenticated}
+                                   onLogin={setIsAuthenticated} {...props}
                                />
                     )} />
                     <Route path="/invoices" component={InvoicesPage} />
