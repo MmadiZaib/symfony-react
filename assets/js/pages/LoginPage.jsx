@@ -1,8 +1,8 @@
 import React, { useState, useContext } from "react"
-import axios from "axios";
 
 import AuthAPI from "../services/authAPI";
 import AuthContext from "../contexts/AuthContext";
+import Field from "../components/forms/Field";
 
 const LoginPage = ({history }) => {
     const [credentials, setCredentials] = useState({
@@ -37,34 +37,23 @@ const LoginPage = ({history }) => {
       <>
           <h1>Connexion à l'application</h1>
           <form onSubmit={handleSubmit}>
-              <div className="form-group">
-                  <label htmlFor="username">Adresse Email de connexion</label>
-                  <input
-                      type="email"
-                      value={credentials.username}
-                      onChange={handleChange}
-                      className={"form-control" + (error && " is-invalid")}
-                      id="username"
-                      name="username"
-                      aria-describedby="usernameFeedBack"
-                      placeholder="Adresse email"
-                  />
-              </div>
-              {error && <div className="invalid-feedback" id="usernameFeedBack">
-                  {error}
-              </div>}
-              <div className="form-group">
-                  <label htmlFor="password">Mot de passe</label>
-                  <input
-                      type="password"
-                      value={credentials.password}
-                      onChange={handleChange}
-                      className="form-control"
-                      id="password"
-                      name="password"
-                      placeholder="Mot de passe"
-                  />
-              </div>
+              <Field
+                  label="Adresse Email"
+                  name="username"
+                  value={credentials.username}
+                  onChange={handleChange}
+                  type="email"
+                  placeHolder="Adresse email de connexion"
+                  error={error}
+              />
+
+              <Field
+                  label="Mot de passe"
+                  value={credentials.password}
+                  onChange={handleChange}
+                  name="password"
+                  type="password"
+              />
               <button type="submit" className="btn btn-success">Je me connecte</button>
           </form>
       </>
