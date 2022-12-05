@@ -1,10 +1,12 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import Field from "../components/forms/Field";
 import {Link} from "react-router-dom";
 
 import CustomersAPI from "../services/CustomersAPI";
 
 const CustomerPage = (props) => {
+
+    const { id = "new"} = props.match.params;
 
     const [customer, setCustomer] = useState({
         lastName: "",
@@ -20,6 +22,27 @@ const CustomerPage = (props) => {
         company: ""
     });
 
+    const [editing, setEditing] = useState(false);
+
+    const fetchCustomer = async id => {
+        try {
+            const data = await CustomersAPI.findById(id);
+            const { firstName, lastName, company, email } = data;
+            setCustomer({firstName, lastName, company, email});
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    useEffect( () => {
+        if (id !== "new") {
+            setEditing(true);
+            fetchCustomer(id);
+        };
+    }, [id]);
+    
+
+
     const handleChange = ({currentTarget}) => {
         const {name, value} = currentTarget;
         setCustomer({...customer, [name]: value});
@@ -29,7 +52,13 @@ const CustomerPage = (props) => {
         event.preventDefault();
 
         try {
-           const response =  await CustomersAPI.new(customer);
+           if (editing) {
+               const response = await CustomersAPI.update(id, customer);
+           } else {
+               const response =  await CustomersAPI.new(customer);
+               props.history.replace("/customers");
+            }
+
            setErrors({});
         } catch (error) {
             if (error.response.data.violations) {
@@ -45,7 +74,7 @@ const CustomerPage = (props) => {
 
     return (
       <>
-          <h1>Creation d'un client</h1>
+         {!editing &&  <h1>Création d'un client</h1> || <h1>Modification du client</h1> }
 
           <form onSubmit={handleSubmit}>
               <Field
