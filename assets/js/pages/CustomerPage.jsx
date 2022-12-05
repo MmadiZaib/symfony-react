@@ -13,7 +13,7 @@ const CustomerPage = (props) => {
         company: ""
     });
 
-    const [error, setError] = useState({
+    const [errors, setErrors] = useState({
         lastName: "",
         firstName: "",
         email: "",
@@ -30,9 +30,16 @@ const CustomerPage = (props) => {
 
         try {
            const response =  await CustomersAPI.new(customer);
-           console.log(response);
+           setErrors({});
         } catch (error) {
-            console.log(error.response);
+            if (error.response.data.violations) {
+                const apiErrors = {};
+                error.response.data.violations.forEach(violation => {
+                    apiErrors[violation.propertyPath] = violation.message;
+                })
+
+                setErrors(apiErrors);
+            }
         }
     }
 
@@ -47,7 +54,7 @@ const CustomerPage = (props) => {
                   placeHolder="Nom de famille du client"
                   value={customer.lastName}
                   onChange={handleChange}
-                  error={error.lastName}
+                  error={errors.lastName}
               />
               <Field
                   name="firstName"
@@ -55,7 +62,7 @@ const CustomerPage = (props) => {
                   placeHolder="Prénom du client"
                   value={customer.firstName}
                   onChange={handleChange}
-                  error={error.firstName}
+                  error={errors.firstName}
               />
               <Field
                   name="email"
@@ -64,7 +71,7 @@ const CustomerPage = (props) => {
                   type="email"
                   value={customer.email}
                   onChange={handleChange}
-                  error={error.email}
+                  error={errors.email}
               />
               <Field
                   name="company"
@@ -72,7 +79,7 @@ const CustomerPage = (props) => {
                   placeHolder="Entreprise du client"
                   value={customer.company}
                   onChange={handleChange}
-                  error={error.company}
+                  error={errors.company}
               />
               <div className="form-group">
                   <button type="submit" className="btn btn-success">Enregistrer</button>
