@@ -1,7 +1,7 @@
 import axios from "axios";
 
 
-function findCustomer(id) {
+function findById(id) {
     return axios
         .get("http://symreact.localhost/api/customers/" + id)
         .then(response => response.data);
@@ -23,7 +23,7 @@ function newCustomer(customer) {
     return axios.post('http://symreact.localhost/api/customers', customer);
 }
 
-function updateCustomer(id, customer) {
+function update(id, customer) {
     return axios.put("http://symreact.localhost/api/customers/" + id, customer);
 }
 
@@ -31,6 +31,6 @@ export default {
     findAll,
     delete: deleteCustomer,
     new: newCustomer,
-    update: updateCustomer,
-    findById: findCustomer
+    update: update,
+    findById
 }

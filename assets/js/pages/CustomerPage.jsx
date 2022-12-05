@@ -4,9 +4,9 @@ import {Link} from "react-router-dom";
 
 import CustomersAPI from "../services/CustomersAPI";
 
-const CustomerPage = (props) => {
+const CustomerPage = ({match, history}) => {
 
-    const { id = "new"} = props.match.params;
+    const { id = "new"} = match.params;
 
     const [customer, setCustomer] = useState({
         lastName: "",
@@ -26,11 +26,11 @@ const CustomerPage = (props) => {
 
     const fetchCustomer = async id => {
         try {
-            const data = await CustomersAPI.findById(id);
-            const { firstName, lastName, company, email } = data;
+            const { firstName, lastName, company, email } = await CustomersAPI.findById(id);
             setCustomer({firstName, lastName, company, email});
         } catch (error) {
-            console.log(error);
+            console.log(error.response);
+            history.replace("/customers");
         }
     }
 
@@ -38,7 +38,7 @@ const CustomerPage = (props) => {
         if (id !== "new") {
             setEditing(true);
             fetchCustomer(id);
-        };
+        }
     }, [id]);
     
 
@@ -53,19 +53,20 @@ const CustomerPage = (props) => {
 
         try {
            if (editing) {
-               const response = await CustomersAPI.update(id, customer);
+               await CustomersAPI.update(id, customer);
            } else {
-               const response =  await CustomersAPI.new(customer);
-               props.history.replace("/customers");
+               await CustomersAPI.new(customer);
+               history.replace("/customers");
             }
 
            setErrors({});
-        } catch (error) {
-            if (error.response.data.violations) {
+        } catch ({response}) {
+            const { violations } = response.data;
+            if (violations) {
                 const apiErrors = {};
-                error.response.data.violations.forEach(violation => {
-                    apiErrors[violation.propertyPath] = violation.message;
-                })
+                violations.forEach(({ propertyPath, message }) => {
+                    apiErrors[propertyPath] = message;
+                });
 
                 setErrors(apiErrors);
             }
