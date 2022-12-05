@@ -12,7 +12,12 @@ function deleteCustomer(id) {
         .delete("http://symreact.localhost/api/customers/" + id)
 }
 
+function newCustomer(customer) {
+    return axios.post('http://symreact.localhost/api/customers', customer);
+}
+
 export default {
     findAll,
-    delete: deleteCustomer
+    delete: deleteCustomer,
+    new: newCustomer
 }
