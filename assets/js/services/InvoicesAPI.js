@@ -1,30 +1,31 @@
 import axios from "axios";
+import  {INVOICES_API} from "../config";
 
 
 function findById(id) {
     return axios
-        .get("http://symreact.localhost/api/invoices/" + id)
+        .get(INVOICES_API + "/" + id)
         .then(response => response.data);
 }
 
 function findAll() {
     return axios
-        .get("http://symreact.localhost/api/invoices")
+        .get(INVOICES_API)
         .then(response =>response.data['hydra:member'])
         ;
 }
 
 function deleteInvoice(id) {
     return  axios
-        .delete("http://symreact.localhost/api/invoices/" + id)
+        .delete(INVOICES_API + "/" + id)
 }
 
 function newInvoice(invoice) {
-    return axios.post('http://symreact.localhost/api/invoices', {...invoice, customer: `/api/customers/${invoice.customer}` });
+    return axios.post(INVOICES_API, {...invoice, customer: `/api/customers/${invoice.customer}` });
 }
 
 function updateInvoice(id, invoice) {
-    return axios.put("http://symreact.localhost/api/invoices/" + id, {...invoice, customer: `/api/customers/${invoice.customer}`});
+    return axios.put(INVOICES_API + "/" + id, {...invoice, customer: `/api/customers/${invoice.customer}`});
 }
 
 export default {
