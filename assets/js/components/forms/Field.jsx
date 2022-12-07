@@ -3,7 +3,7 @@ import React from "react";
 const Field = ({name, label, value, onChange, placeHolder = "", type = "text", error = ""}
 ) => {
     return (
-        <div className="form-group">
+        <div className="form-group mb-3">
             <label htmlFor="{name}">{label}</label>
             <input
                 type={type}
