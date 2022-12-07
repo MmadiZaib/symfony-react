@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import ReactDOM from 'react-dom';
+import { HashRouter, Switch , Route, withRouter } from "react-router-dom";
 /*
  * Welcome to your app's main JavaScript file!
  *
@@ -14,17 +15,17 @@ import './styles/app.css';
 import './bootstrap';
 
 import NavBar from "./js/components/NavBar";
+import PrivateRoute from "./js/components/PrivateRoute";
 
 import HomePage from "./js/pages/HomePage";
 import CustomersPage from "./js/pages/CustomersPage";
 import CustomerPage from "./js/pages/CustomerPage";
+import InvoicePage from "./js/pages/InvoicePage";
 import InvoicesPage from "./js/pages/InvoicesPage";
 import LoginPage from "./js/pages/LoginPage";
+
 import AuthAPI from "./js/services/authAPI";
 import AuthContext from "./js/contexts/AuthContext";
-import PrivateRoute from "./js/components/PrivateRoute";
-
-import { HashRouter, Switch , Route, withRouter } from "react-router-dom";
 
 //import CustomersPageWithPagination from "./js/pages/CustomersPageWithPagination";
 
@@ -46,6 +47,7 @@ const App = () => {
                 <main className="container pt-5">
                     <Switch>
                         <Route path="/login" component={LoginPage} />
+                        <PrivateRoute path="/invoices/:id" component={InvoicePage}/>
                         <PrivateRoute path="/invoices" component={InvoicesPage}/>
                         <PrivateRoute path="/customers/:id" component={CustomerPage}/>
                         <PrivateRoute path="/customers" component={CustomersPage}/>
