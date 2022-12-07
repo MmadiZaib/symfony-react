@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Field from "../components/forms/Field";
 import {Link} from "react-router-dom";
 import Select from "../components/forms/Select";
+
+import CustomersAPI from "../services/CustomersAPI";
 
 const InvoicePage = (props) => {
 
@@ -16,6 +18,22 @@ const InvoicePage = (props) => {
         customer: "",
         status: ""
     });
+
+    const [customers, setCustomers] = useState([]);
+
+    const fetchCustomers = async () => {
+        try {
+            const data =  await CustomersAPI.findAll();
+            setCustomers(data);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    useEffect(() => {
+        fetchCustomers();
+    }, []);
+
 
     const handleChange = ({currentTarget}) => {
         const { name, value } = currentTarget;
@@ -42,8 +60,7 @@ const InvoicePage = (props) => {
                   error={errors.customer}
                   onChange={handleChange}
               >
-                  <option value="1">Ahmed Mohamed</option>
-                  <option value="2">Madi Zaib</option>
+                  {customers.map(customer => <option key={customer.id} value={customer.id}>{customer.firstName} {customer.lastName}</option>)}
               </Select>
 
               <Select
