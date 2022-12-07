@@ -5,6 +5,7 @@ import InvoicesAPI from "../services/InvoicesAPI";
 import CustomersAPI from "../services/CustomersAPI";
 import {Link} from "react-router-dom";
 import {toast} from "react-toastify";
+import TableLoader from "../components/loaders/TableLoader";
 
 
 const STATUS_CLASSES = {
@@ -25,11 +26,13 @@ const InvoicesPage = ({history}) => {
     const [invoices, setInvoices] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [search, setSearch] = useState("");
+    const [loading, setLoading] = useState(true);
 
     const fetchInvoices = async () => {
         try {
             const data = await InvoicesAPI.findAll();
             setInvoices(data);
+            setLoading(false);
         } catch (error) {
             console.log(error.response)
             toast.error("Erreur lors du chargment des factures");
@@ -109,7 +112,7 @@ const InvoicesPage = ({history}) => {
                     <th></th>
                 </tr>
                 </thead>
-                <tbody>
+                {!loading && <tbody>
                 {paginatedInvoices.map(invoice =>
                     <tr key={invoice.id}>
                         <td>{invoice.invoiceId}</td>
@@ -134,7 +137,9 @@ const InvoicesPage = ({history}) => {
                     </tr>
                 )}
                 </tbody>
+                }
             </table>
+            {loading && <TableLoader />}
             <Pagination
                 currentPage={currentPage}
                 itemsPerPage={itemsPerPage}
