@@ -27,6 +27,8 @@ import RegisterPage from "./js/pages/RegisterPage";
 
 import AuthAPI from "./js/services/authAPI";
 import AuthContext from "./js/contexts/AuthContext";
+import {toast, ToastContainer} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 //import CustomersPageWithPagination from "./js/pages/CustomersPageWithPagination";
 
@@ -57,6 +59,9 @@ const App = () => {
                     </Switch>
                 </main>
             </HashRouter>
+            <ToastContainer
+                position={toast.POSITION.BOTTOM_RIGHT}
+            />
         </AuthContext.Provider>
     );
 };
