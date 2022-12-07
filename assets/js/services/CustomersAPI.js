@@ -1,6 +1,8 @@
 import axios from "axios";
 import Cache from "./cache";
 
+import {CUSTOMERS_API} from "../config";
+
 
 async function findById(id) {
     const cachedCustomer = await Cache.get("customers." + id);
@@ -10,7 +12,7 @@ async function findById(id) {
     }
 
     return axios
-        .get("http://symreact.localhost/api/customers/" + id)
+        .get(CUSTOMERS_API + "/" + id)
         .then(response => {
             const customer = response.data;
             Cache.set("customers." + id);
@@ -27,7 +29,7 @@ async function findAll() {
     }
 
     return axios
-        .get("http://symreact.localhost/api/customers")
+        .get(CUSTOMERS_API)
         .then(response => {
             const customers = response.data['hydra:member']
             Cache.set("customers", customers)
@@ -41,7 +43,7 @@ async function findAll() {
 function deleteCustomer(id) {
 
     return  axios
-        .delete("http://symreact.localhost/api/customers/" + id)
+        .delete(CUSTOMERS_API +  "/" + id)
         .then(async response => {
             const cacheCustomers = await Cache.get("customers")
             if (cacheCustomers) {
@@ -53,7 +55,7 @@ function deleteCustomer(id) {
 }
 
 function newCustomer(customer) {
-    return axios.post('http://symreact.localhost/api/customers', customer).then(async response =>  {
+    return axios.post(CUSTOMERS_API, customer).then(async response =>  {
         const cacheCustomers = await Cache.get("customers")
         if (cacheCustomers) {
             Cache.set("customers",[...cacheCustomers, response.data])
@@ -63,7 +65,7 @@ function newCustomer(customer) {
 }
 
 function update(id, customer) {
-    return axios.put("http://symreact.localhost/api/customers/" + id, customer).then(async response => {
+    return axios.put(CUSTOMERS_API +  "/" + id, customer).then(async response => {
         const cacheCustomers = await Cache.get("customers")
         const cacheCustomer = await Cache.get("customers." + id)
 
