@@ -4,13 +4,16 @@ import {Link} from "react-router-dom";
 import Select from "../components/forms/Select";
 
 import CustomersAPI from "../services/CustomersAPI";
+import InvoicesAPI from "../services/InvoicesAPI";
 
-const InvoicePage = (props) => {
+const InvoicePage = ({match, history}) => {
+
+    const { id = "new"} = match.params;
 
     const [invoice, setInvoice] = useState({
         amount: "",
         customer: "",
-        status: ""
+        status: "SENT"
     });
 
     const [errors, setErrors] = useState({
@@ -21,12 +24,29 @@ const InvoicePage = (props) => {
 
     const [customers, setCustomers] = useState([]);
 
+    const [editing, setEditing] = useState(false);
+
     const fetchCustomers = async () => {
         try {
             const data =  await CustomersAPI.findAll();
             setCustomers(data);
+
+            if (!invoice.customer && id === "new") {
+                setInvoice({...invoice, customer: data[0].id});
+            }
         } catch (error) {
             console.log(error);
+        }
+    }
+
+    const fetchInvoice = async id => {
+        try {
+            const { amount, customer, status }  = await InvoicesAPI.findById(id);
+            const data = { amount, customer: customer.id, status };
+            setInvoice(data);
+        } catch (error) {
+            console.log(error.response);
+            history.replace("/invoices");
         }
     }
 
@@ -35,15 +55,46 @@ const InvoicePage = (props) => {
     }, []);
 
 
+    useEffect(() => {
+        if (id !== "new") {
+            setEditing(true)
+            fetchInvoice(id);
+        }
+    }, [id]);
+
+
     const handleChange = ({currentTarget}) => {
         const { name, value } = currentTarget;
         setInvoice({ ...invoice, [name]: value });
     };
 
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        
+        try {
+            if (editing) {
+                await InvoicesAPI.update(id, invoice);
+            } else {
+                await InvoicesAPI.new(invoice);
+                history.replace("/invoices");
+            }
+            setErrors({});
+        } catch ({response}) {
+            const { violations } = response.data;
+            if (violations) {
+                const apiErrors = {};
+                violations.forEach(({propertyPath, message}) => {
+                   apiErrors[propertyPath] = message;
+                });
+                setErrors(apiErrors);
+            }
+        }
+    }
+
     return (
       <>
-          <h1>Création d'une facture</h1>
-          <form>
+          {!editing &&  <h1>Création d'une facture</h1> || <h1>Modification d'une facture</h1> }
+          <form onSubmit={handleSubmit}>
               <Field
                   name="amount"
                   type="number"

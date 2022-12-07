@@ -19,7 +19,7 @@ const STATUS_LABEL = {
 };
 
 
-const InvoicesPage = (props) => {
+const InvoicesPage = ({history}) => {
 
     const [invoices, setInvoices] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
@@ -120,7 +120,7 @@ const InvoicesPage = (props) => {
                         </td>
                         <td className="text-center">{invoice.amount.toLocaleString()} €</td>
                         <td>
-                            <button className="btn btn-sm btn-primary">Edit</button>
+                            <Link to={"/invoices/" + invoice.id } className="btn btn-sm btn-primary">Edit</Link>
                             <button
                                 onClick={() => handleDelete(invoice.id)}
                                 className="btn btn-sm btn-danger">

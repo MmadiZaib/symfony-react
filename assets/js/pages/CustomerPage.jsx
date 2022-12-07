@@ -48,7 +48,7 @@ const CustomerPage = ({match, history}) => {
         setCustomer({...customer, [name]: value});
     }
 
-    const handleSubmit = async () => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
 
         try {
