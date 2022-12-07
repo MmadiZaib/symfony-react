@@ -4,6 +4,7 @@ import {Link} from "react-router-dom";
 
 import CustomersAPI from "../services/CustomersAPI";
 import {toast} from "react-toastify";
+import FormContentLoader from "../components/loaders/FormContentLoader";
 
 const CustomerPage = ({match, history}) => {
 
@@ -24,11 +25,13 @@ const CustomerPage = ({match, history}) => {
     });
 
     const [editing, setEditing] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const fetchCustomer = async id => {
         try {
             const { firstName, lastName, company, email } = await CustomersAPI.findById(id);
             setCustomer({firstName, lastName, company, email});
+            setLoading(false)
         } catch (error) {
             toast.error("Le client n'a pas pu être chargé");
             history.replace("/customers");
@@ -38,6 +41,7 @@ const CustomerPage = ({match, history}) => {
     useEffect( () => {
         if (id !== "new") {
             setEditing(true);
+            setLoading(true);
             fetchCustomer(id);
         }
     }, [id]);
@@ -80,8 +84,9 @@ const CustomerPage = ({match, history}) => {
     return (
       <>
          {!editing &&  <h1>Création d'un client</h1> || <h1>Modification du client</h1> }
+          {loading && <FormContentLoader />}
 
-          <form onSubmit={handleSubmit}>
+          {!loading && <form onSubmit={handleSubmit}>
               <Field
                   name="lastName"
                   label="Nom de famille"
@@ -119,7 +124,7 @@ const CustomerPage = ({match, history}) => {
                   <button type="submit" className="btn btn-success">Enregistrer</button>
                   <Link to="/customers" className="btn btn-link">Retour à la liste</Link>
               </div>
-          </form>
+          </form>}
       </>
     );
 }
