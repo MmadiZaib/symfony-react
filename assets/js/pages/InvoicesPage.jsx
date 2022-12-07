@@ -4,6 +4,7 @@ import Pagination from "../components/Pagination";
 import InvoicesAPI from "../services/InvoicesAPI";
 import CustomersAPI from "../services/CustomersAPI";
 import {Link} from "react-router-dom";
+import {toast} from "react-toastify";
 
 
 const STATUS_CLASSES = {
@@ -31,6 +32,7 @@ const InvoicesPage = ({history}) => {
             setInvoices(data);
         } catch (error) {
             console.log(error.response)
+            toast.error("Une erreur est survenue");
         }
     };
 
@@ -62,6 +64,7 @@ const InvoicesPage = ({history}) => {
         } catch (error) {
             setInvoices(originalInvoices);
             console.log(error.response);
+            toast.error("Une erreur est survenue");
         }
     };
 
